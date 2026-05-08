@@ -9,10 +9,12 @@ const Product = ({ tiktokLink }) => {
       price: "Rp 16.000",
       originalPrice: "Rp 20.000",
       image: "/basreng-poster.png",
+      // Alt text yang dioptimasi untuk SEO Gambar
+      altText:
+        "Basreng Pedas Daun Jeruk Premium Basrengholic Banyuwangi - Renyah dan Gurih",
       isAvailable: true,
       badge: "Best Seller",
       badgeIcon: <FaFireAlt className="text-white" />,
-      // Label warna solid merah yang profesional dan tegas
       badgeColor: "bg-red-600 text-white shadow-md",
     },
     {
@@ -21,10 +23,11 @@ const Product = ({ tiktokLink }) => {
       price: "Rp 15.000",
       originalPrice: null,
       image: "/jamur-poster.png",
+      altText:
+        "Jamur Crispy Varian Rasa Basrengholic - Camilan Sehat dan Renyah",
       isAvailable: false,
       badge: "Coming Soon",
       badgeIcon: <FaLock className="text-white" />,
-      // Label warna solid abu-abu gelap yang elegan
       badgeColor: "bg-gray-800 text-white shadow-md",
     },
     {
@@ -33,6 +36,7 @@ const Product = ({ tiktokLink }) => {
       price: "Rp 20.000",
       originalPrice: null,
       image: "/poster-rengginang.png",
+      altText: "Rengginang Bumbu Tradisional Basrengholic Banyuwangi",
       isAvailable: false,
       badge: "Coming Soon",
       badgeIcon: <FaLock className="text-white" />,
@@ -61,15 +65,16 @@ const Product = ({ tiktokLink }) => {
               key={product.id}
               className="bg-white rounded-[1.5rem] shadow-lg border border-gray-100 overflow-hidden group hover:-translate-y-2 hover:shadow-xl transition-all duration-300 flex flex-col"
             >
-              {/* IMAGE CONTAINER - Proporsional (h-60) */}
+              {/* IMAGE CONTAINER */}
               <div className="h-60 w-full overflow-hidden bg-gray-100 relative">
                 <img
                   src={product.image}
-                  alt={product.name}
+                  alt={product.altText} // SEO: Menggunakan deskripsi yang kaya kata kunci
+                  loading="lazy" // Performa: Hanya memuat gambar saat akan terlihat di layar
                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 z-0"
                 />
 
-                {/* DYNAMIC BADGE - Desain Solid, Clean, Professional */}
+                {/* DYNAMIC BADGE */}
                 {product.badge && (
                   <div
                     className={`absolute top-4 right-4 ${product.badgeColor} px-3 py-1.5 rounded font-bold uppercase tracking-wider text-[10px] flex items-center gap-1.5 z-20`}
@@ -136,7 +141,6 @@ const Product = ({ tiktokLink }) => {
                         <FaLock className="text-sm" />
                         Belum Tersedia
                       </button>
-                      {/* Spacer pengganti teks sekunder agar tinggi card sejajar */}
                       <div className="h-[12px]"></div>
                     </>
                   )}
