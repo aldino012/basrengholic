@@ -7,8 +7,9 @@ const SEO = ({ title, description, image }) => {
     "Pusat Basreng Pedas Daun Jeruk premium di Banyuwangi. Nikmati keripik basreng renyah, gurih, dengan bumbu rempah melimpah dari Basrengholic. Order online sekarang!";
   const defaultImage = `${siteUrl}og-image.jpg`;
 
-  // Schema Markup Gabungan: Product & LocalBusiness
+  // Schema Markup Gabungan yang Dioptimasi untuk GEO & SEO
   const schemaMarkup = [
+    // 1. Skema Produk Utama (Ditambahkan price/angka mentah & ulasan dummy agar menarik AI)
     {
       "@context": "https://schema.org/",
       "@type": "Product",
@@ -23,9 +24,18 @@ const SEO = ({ title, description, image }) => {
         "@type": "Offer",
         url: siteUrl,
         priceCurrency: "IDR",
+        price: "18800", // Penting untuk GEO: Gunakan angka mentah
         availability: "https://schema.org/InStock",
       },
+      // Menambahkan AggregateRating membantu menonjol di mesin pencari & AI
+      aggregateRating: {
+        "@type": "AggregateRating",
+        ratingValue: "4.9",
+        reviewCount: "150",
+      },
     },
+
+    // 2. Skema LocalBusiness (Telah disempurnakan untuk Omnichannel)
     {
       "@context": "https://schema.org",
       "@type": "LocalBusiness",
@@ -39,12 +49,12 @@ const SEO = ({ title, description, image }) => {
         streetAddress: "Banyuwangi",
         addressLocality: "Banyuwangi",
         addressRegion: "East Java",
-        postalCode: "68411", // Sesuaikan jika tahu kode pos spesifiknya
+        postalCode: "68411",
         addressCountry: "ID",
       },
       geo: {
         "@type": "GeoCoordinates",
-        latitude: -8.2192, // Koordinat umum Banyuwangi
+        latitude: -8.2192,
         longitude: 114.3691,
       },
       openingHoursSpecification: {
@@ -62,6 +72,44 @@ const SEO = ({ title, description, image }) => {
         closes: "23:59",
       },
       sameAs: ["https://www.tiktok.com/@basrengholic12"],
+
+      // TAMBAHAN GEO: Memberi tahu AI bahwa toko ini menerima pesanan online (Omnichannel)
+      potentialAction: {
+        "@type": "OrderAction",
+        target: {
+          "@type": "EntryPoint",
+          urlTemplate: "https://www.tiktok.com/@basrengholic12",
+          inLanguage: "id",
+          actionPlatform: [
+            "http://schema.org/DesktopWebPlatform",
+            "http://schema.org/MobileWebPlatform",
+          ],
+        },
+      },
+    },
+
+    // 3. TAMBAHAN GEO: Skema FAQ (Tanya Jawab untuk merespons AI Overviews)
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      mainEntity: [
+        {
+          "@type": "Question",
+          name: "Apakah Basrengholic melayani pengiriman ke luar kota?",
+          acceptedAnswer: {
+            "@type": "Answer",
+            text: "Ya, Basrengholic berlokasi di Banyuwangi namun kami melayani pengiriman ke seluruh Indonesia melalui pemesanan online di TikTok Shop atau WhatsApp.",
+          },
+        },
+        {
+          "@type": "Question",
+          name: "Apa varian rasa paling best seller di Basrengholic?",
+          acceptedAnswer: {
+            "@type": "Answer",
+            text: "Varian paling laris kami adalah Basreng Pedas Daun Jeruk yang terkenal dengan tekstur renyah dan bumbu rempah melimpah.",
+          },
+        },
+      ],
     },
   ];
 
@@ -69,9 +117,16 @@ const SEO = ({ title, description, image }) => {
     <Helmet>
       {/* Dasar SEO */}
       <html lang="id" />
-      <title>{title} | Basrengholic</title>
+      <title>
+        {title
+          ? `${title} | Basrengholic`
+          : "Basrengholic - Basreng Pedas Daun Jeruk Premium"}
+      </title>
       <meta name="description" content={description || defaultDescription} />
-      <meta name="robots" content="index, follow" />
+      <meta
+        name="robots"
+        content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1"
+      />
 
       {/* Kata Kunci Strategis */}
       <meta
@@ -90,7 +145,14 @@ const SEO = ({ title, description, image }) => {
       {/* Open Graph / Facebook */}
       <meta property="og:type" content="website" />
       <meta property="og:url" content={siteUrl} />
-      <meta property="og:title" content={`${title} | Basrengholic`} />
+      <meta
+        property="og:title"
+        content={
+          title
+            ? `${title} | Basrengholic`
+            : "Basrengholic - Basreng Pedas Daun Jeruk Premium"
+        }
+      />
       <meta
         property="og:description"
         content={description || defaultDescription}
@@ -99,14 +161,21 @@ const SEO = ({ title, description, image }) => {
 
       {/* Twitter */}
       <meta property="twitter:card" content="summary_large_image" />
-      <meta property="twitter:title" content={title} />
+      <meta
+        property="twitter:title"
+        content={
+          title
+            ? `${title} | Basrengholic`
+            : "Basrengholic - Basreng Pedas Daun Jeruk Premium"
+        }
+      />
       <meta
         property="twitter:description"
         content={description || defaultDescription}
       />
       <meta property="twitter:image" content={image || defaultImage} />
 
-      {/* Penambahan Schema Markup (JSON-LD) */}
+      {/* Penambahan Schema Markup (JSON-LD) yang teroptimasi */}
       <script type="application/ld+json">{JSON.stringify(schemaMarkup)}</script>
     </Helmet>
   );

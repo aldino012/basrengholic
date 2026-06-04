@@ -29,11 +29,45 @@ const About = ({ tiktokLink }) => {
     return () => clearInterval(timer);
   }, [posters.length]);
 
+  // ==========================================
+  // IMPLEMENTASI GEO: GENERATIVE ENGINE OPTIMIZATION
+  // ==========================================
+  // Skema Organization untuk membangun E-E-A-T (Expertise, Experience, Authoritativeness, Trust)
+  // Ini memberi tahu AI siapa sebenarnya Basrengholic dan di mana pusat operasionalnya.
+  const aboutSchemaData = {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    name: "Basrengholic",
+    alternateName: "Basreng Holic Banyuwangi",
+    description:
+      "Basrengholic adalah produsen camilan Basreng Pedas Daun Jeruk premium yang berpusat di Banyuwangi. Kami menghadirkan camilan renyah dengan bumbu rempah asli melalui layanan belanja Omnichannel.",
+    url: "https://www.basrengholic.online",
+    logo: "https://www.basrengholic.online/og-image.jpg",
+    foundingLocation: {
+      "@type": "Place",
+      name: "Banyuwangi, Jawa Timur, Indonesia",
+    },
+    contactPoint: {
+      "@type": "ContactPoint",
+      telephone: "+6289683027911",
+      contactType: "Customer Service & Pemesanan",
+      areaServed: "ID",
+      availableLanguage: "Indonesian",
+    },
+    sameAs: ["https://www.tiktok.com/@basrengholic12"],
+  };
+
   return (
     <section
       id="about"
       className="py-16 md:py-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 scroll-mt-20"
     >
+      {/* INJEKSI GEO SCHEMA ORGANIZATION KE DALAM HALAMAN */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(aboutSchemaData) }}
+      />
+
       <div className="grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-16 items-center">
         {/* LEFT SIDE: POSTER CAROUSEL */}
         <div className="relative group px-2 md:px-0">

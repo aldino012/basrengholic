@@ -6,10 +6,9 @@ const Product = ({ tiktokLink }) => {
     {
       id: 1,
       name: "Basreng Pedas Daun Jeruk",
-      price: "Rp 16.000",
+      price: "Rp 18.800",
       originalPrice: "Rp 20.000",
       image: "/basreng-poster.png",
-      // Alt text yang dioptimasi untuk SEO Gambar
       altText:
         "Basreng Pedas Daun Jeruk Premium Basrengholic Banyuwangi - Renyah dan Gurih",
       isAvailable: true,
@@ -25,10 +24,7 @@ const Product = ({ tiktokLink }) => {
       image: "/jamur-poster.png",
       altText:
         "Jamur Crispy Varian Rasa Basrengholic - Camilan Sehat dan Renyah",
-      isAvailable: false,
-      badge: "Coming Soon",
-      badgeIcon: <FaLock className="text-white" />,
-      badgeColor: "bg-gray-800 text-white shadow-md",
+      isAvailable: true,
     },
     {
       id: 3,
@@ -37,18 +33,50 @@ const Product = ({ tiktokLink }) => {
       originalPrice: null,
       image: "/poster-rengginang.png",
       altText: "Rengginang Bumbu Tradisional Basrengholic Banyuwangi",
-      isAvailable: false,
-      badge: "Coming Soon",
-      badgeIcon: <FaLock className="text-white" />,
-      badgeColor: "bg-gray-800 text-white shadow-md",
+      isAvailable: true,
     },
   ];
+
+  // ==========================================
+  // IMPLEMENTASI GEO: GENERATIVE ENGINE OPTIMIZATION
+  // ==========================================
+  // Kita membuat skema data terstruktur (JSON-LD) agar mesin pencari & AI
+  // bisa langsung mengerti katalog produk, harga, dan ketersediaannya.
+  const geoSchemaData = {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    itemListElement: products.map((product, index) => ({
+      "@type": "ListItem",
+      position: index + 1,
+      item: {
+        "@type": "Product",
+        name: product.name,
+        // AI butuh URL absolut untuk gambar (ganti dengan domain asli Anda saat rilis)
+        image: `https://domainanda.com${product.image}`,
+        offers: {
+          "@type": "Offer",
+          priceCurrency: "IDR",
+          // Menghapus tulisan "Rp " dan titik agar AI membaca angka mentahnya (misal: 18800)
+          price: product.price.replace(/[^0-9]/g, ""),
+          availability: product.isAvailable
+            ? "https://schema.org/InStock"
+            : "https://schema.org/OutOfStock",
+        },
+      },
+    })),
+  };
 
   return (
     <section
       id="produk"
       className="py-24 relative scroll-mt-20 bg-gray-50 bg-[radial-gradient(#d1d5db_1px,transparent_1px)] [background-size:24px_24px]"
     >
+      {/* INJEKSI GEO SCHEMA KE DALAM HALAMAN */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(geoSchemaData) }}
+      />
+
       <div className="max-w-7xl mx-auto px-4 relative z-10">
         {/* HEADER SECTION */}
         <div className="text-center mb-16">
@@ -69,8 +97,8 @@ const Product = ({ tiktokLink }) => {
               <div className="h-60 w-full overflow-hidden bg-gray-100 relative">
                 <img
                   src={product.image}
-                  alt={product.altText} // SEO: Menggunakan deskripsi yang kaya kata kunci
-                  loading="lazy" // Performa: Hanya memuat gambar saat akan terlihat di layar
+                  alt={product.altText}
+                  loading="lazy"
                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 z-0"
                 />
 

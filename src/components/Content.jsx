@@ -9,20 +9,59 @@ const Content = () => {
       src: "/vid/cartisol-content.mp4",
       title: "Racun Basreng Holic 🤤",
       views: "523",
+      // Tambahan deskripsi untuk Schema Markup (SEO & GEO)
+      description:
+        "Video ASMR dan review produk Basreng Pedas Daun Jeruk dari Basrengholic yang bikin nagih.",
+      uploadDate: "2024-01-01T08:00:00+08:00",
     },
     {
       id: 2,
       src: "/vid/discount-content.mp4",
       title: "Diskon Ugal-ugalan! 💸",
       views: "197",
+      description:
+        "Informasi diskon dan promo ugal-ugalan untuk pembelian produk cemilan Basrengholic.",
+      uploadDate: "2024-01-15T12:00:00+08:00",
     },
     {
       id: 3,
       src: "/vid/pov-content.mp4",
       title: "POV: Perang Batin Pilih Basreng atau Nabung? 😵‍💫",
       views: "93",
+      description:
+        "Video POV lucu tentang pilihan sulit antara menabung atau jajan cemilan pedas Basrengholic.",
+      uploadDate: "2024-02-01T15:30:00+08:00",
     },
   ];
+
+  // ==========================================
+  // IMPLEMENTASI GEO: GENERATIVE ENGINE OPTIMIZATION
+  // ==========================================
+  // Membuat skema ItemList yang berisi daftar VideoObject agar AI
+  // memahami konteks setiap video yang ada di halaman ini.
+  const videoSchemaData = {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    itemListElement: localVideos.map((video, index) => ({
+      "@type": "ListItem",
+      position: index + 1,
+      item: {
+        "@type": "VideoObject",
+        name: video.title,
+        description: video.description,
+        // AI butuh URL absolut. Ganti domain ini saat Anda sudah live
+        contentUrl: `https://www.basrengholic.online${video.src}`,
+        // URL Thumbnail default (wajib untuk skema VideoObject)
+        thumbnailUrl: "https://www.basrengholic.online/og-image.jpg",
+        uploadDate: video.uploadDate,
+        interactionStatistic: {
+          "@type": "InteractionCounter",
+          interactionType: { "@type": "WatchAction" },
+          userInteractionCount: parseInt(video.views.replace(/[^0-9]/g, "")),
+        },
+      },
+    })),
+  };
 
   return (
     <section
@@ -30,6 +69,12 @@ const Content = () => {
       // Menambahkan pola Grid tipis dengan Tailwind arbitrary values
       className="py-24 relative overflow-hidden bg-gray-50 scroll-mt-20 bg-[linear-gradient(to_right,#e5e7eb_1px,transparent_1px),linear-gradient(to_bottom,#e5e7eb_1px,transparent_1px)] bg-[size:2rem_2rem]"
     >
+      {/* INJEKSI GEO SCHEMA VIDEO KE DALAM HALAMAN */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(videoSchemaData) }}
+      />
+
       {/* BACKGROUND DECORATION - Soft Glow Elegant Effect */}
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[500px] bg-red-100/50 blur-[120px] rounded-full pointer-events-none z-0"></div>
       <div className="absolute bottom-0 right-0 w-[400px] h-[400px] bg-orange-100/50 blur-[100px] rounded-full pointer-events-none z-0"></div>
