@@ -2,13 +2,18 @@ import React from "react";
 import { FaWhatsapp, FaTiktok, FaFireAlt, FaLock } from "react-icons/fa";
 
 const Product = ({ tiktokLink }) => {
+  const siteUrl = "https://www.basrengholic.online";
+
   const products = [
     {
       id: 1,
-      name: "Basreng Pedas Daun Jeruk",
+      name: "Basreng Pedas Daun Jeruk Premium",
+      sku: "BSRG-PDJ-01", // Tambahan untuk kelengkapan data terstruktur
       price: "Rp 18.800",
       originalPrice: "Rp 20.000",
       image: "/basreng-poster.png",
+      description:
+        "Keripik basreng pedas daun jeruk premium khas Banyuwangi. Tekstur renyah, tidak keras, dengan bumbu rempah melimpah.", // Tambahan deskripsi untuk AI
       altText:
         "Basreng Pedas Daun Jeruk Premium Basrengholic Banyuwangi - Renyah dan Gurih",
       isAvailable: true,
@@ -18,30 +23,34 @@ const Product = ({ tiktokLink }) => {
     },
     {
       id: 2,
-      name: "Jamur Crispy Varian",
+      name: "Jamur Crispy Khas Banyuwangi",
+      sku: "JMR-CRP-02",
       price: "Rp 15.000",
       originalPrice: null,
       image: "/jamur-poster.png",
+      description:
+        "Camilan jamur crispy pilihan dengan varian rasa gurih yang renyah dan sehat khas Basrengholic.",
       altText:
         "Jamur Crispy Varian Rasa Basrengholic - Camilan Sehat dan Renyah",
       isAvailable: true,
     },
     {
       id: 3,
-      name: "Rengginang Bumbu",
+      name: "Rengginang Bumbu Tradisional",
+      sku: "RNG-BMB-03",
       price: "Rp 20.000",
       originalPrice: null,
       image: "/poster-rengginang.png",
+      description:
+        "Rengginang bumbu tradisional premium dari Basrengholic Banyuwangi, gurih alami dan renyah juara.",
       altText: "Rengginang Bumbu Tradisional Basrengholic Banyuwangi",
       isAvailable: true,
     },
   ];
 
   // ==========================================
-  // IMPLEMENTASI GEO: GENERATIVE ENGINE OPTIMIZATION
+  // IMPLEMENTASI GEO: GENERATIVE ENGINE OPTIMIZATION (DIOPTIMALKAN)
   // ==========================================
-  // Kita membuat skema data terstruktur (JSON-LD) agar mesin pencari & AI
-  // bisa langsung mengerti katalog produk, harga, dan ketersediaannya.
   const geoSchemaData = {
     "@context": "https://schema.org",
     "@type": "ItemList",
@@ -51,13 +60,20 @@ const Product = ({ tiktokLink }) => {
       item: {
         "@type": "Product",
         name: product.name,
-        // AI butuh URL absolut untuk gambar (ganti dengan domain asli Anda saat rilis)
-        image: `https://domainanda.com${product.image}`,
+        sku: product.sku,
+        description: product.description, // AI sangat bergantung pada deskripsi untuk memahami entitas produk
+        image: `${siteUrl}${product.image}`, // Menggunakan domain resmi website Anda
+        brand: {
+          "@type": "Brand",
+          name: "Basrengholic",
+        },
         offers: {
           "@type": "Offer",
+          url: siteUrl,
           priceCurrency: "IDR",
-          // Menghapus tulisan "Rp " dan titik agar AI membaca angka mentahnya (misal: 18800)
           price: product.price.replace(/[^0-9]/g, ""),
+          priceValidUntil: "2026-12-31",
+          itemCondition: "https://schema.org/NewCondition",
           availability: product.isAvailable
             ? "https://schema.org/InStock"
             : "https://schema.org/OutOfStock",
@@ -71,7 +87,6 @@ const Product = ({ tiktokLink }) => {
       id="produk"
       className="py-24 relative scroll-mt-20 bg-gray-50 bg-[radial-gradient(#d1d5db_1px,transparent_1px)] [background-size:24px_24px]"
     >
-      {/* INJEKSI GEO SCHEMA KE DALAM HALAMAN */}
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(geoSchemaData) }}
@@ -80,8 +95,10 @@ const Product = ({ tiktokLink }) => {
       <div className="max-w-7xl mx-auto px-4 relative z-10">
         {/* HEADER SECTION */}
         <div className="text-center mb-16">
+          {/* OPTIMASI SEO & GEO: Heading menggunakan kata kunci pencarian transaksional */}
           <h2 className="text-4xl md:text-5xl font-black text-gray-900 mb-4 italic uppercase tracking-tighter drop-shadow-sm">
-            MENU PALING <span className="text-red-600">NAGIH</span>
+            Katalog Basreng &{" "}
+            <span className="text-red-600">Camilan Pedas</span>
           </h2>
           <div className="w-24 h-2 bg-gradient-to-r from-red-600 to-orange-400 mx-auto rounded-full"></div>
         </div>
@@ -116,9 +133,15 @@ const Product = ({ tiktokLink }) => {
               {/* CONTENT AREA */}
               <div className="p-6 flex-1 flex flex-col bg-white">
                 <div className="mb-auto">
-                  <h3 className="font-extrabold text-gray-900 uppercase text-sm mb-1 tracking-tight">
+                  {/* OPTIMASI SEO: Menggunakan Tag H3 untuk nama produk agar hirarki data dibaca sempurna oleh Googlebot */}
+                  <h3 className="font-extrabold text-gray-900 uppercase text-sm mb-2 tracking-tight">
                     {product.name}
                   </h3>
+
+                  {/* Tambahan visual deskripsi singkat untuk memperkuat kepadatan kata kunci (Keyword Density) */}
+                  <p className="text-gray-500 text-xs mb-4 line-clamp-2">
+                    {product.description}
+                  </p>
 
                   {/* PRICE SECTION */}
                   <div className="flex items-end gap-2 mb-6">

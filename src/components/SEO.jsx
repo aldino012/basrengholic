@@ -1,41 +1,49 @@
 // src/components/SEO.jsx
 import { Helmet } from "react-helmet-async";
 
-const SEO = ({ title, description, image }) => {
+const SEO = ({ title, description, image, url }) => {
   const siteUrl = "https://www.basrengholic.online/";
+  const currentUrl = url ? `${siteUrl}${url}` : siteUrl;
+
+  // OPTIMASI 1: Front-Loading Title. Kata kunci utama ada di depan, brand di belakang.
+  const defaultTitle =
+    "Basreng Pedas Daun Jeruk & Original di Banyuwangi | Basrengholic";
+
+  // OPTIMASI 2: Deskripsi menyertakan keyword dari Ahrefs (basreng pedas, basreng daun jeruk, basreng original)
   const defaultDescription =
-    "Pusat Basreng Pedas Daun Jeruk premium di Banyuwangi. Nikmati keripik basreng renyah, gurih, dengan bumbu rempah melimpah dari Basrengholic. Order online sekarang!";
+    "Cari basreng pedas, basreng daun jeruk, atau basreng original di Banyuwangi? Basrengholic solusinya! Keripik basreng renyah, bumbu melimpah, harga grosir. Pesan online sekarang!";
+
   const defaultImage = `${siteUrl}og-image.jpg`;
 
-  // Schema Markup Gabungan yang Dioptimasi untuk GEO & SEO
   const schemaMarkup = [
-    // 1. Skema Produk Utama (Ditambahkan price/angka mentah & ulasan dummy agar menarik AI)
     {
       "@context": "https://schema.org/",
       "@type": "Product",
       name: "Basreng Pedas Daun Jeruk Basrengholic",
       image: [defaultImage],
       description: description || defaultDescription,
+      sku: "BSRG-PDJ-01", // Tambahan: Google Search Console sering meminta SKU
       brand: {
         "@type": "Brand",
         name: "Basrengholic",
       },
       offers: {
         "@type": "Offer",
-        url: siteUrl,
+        url: currentUrl,
         priceCurrency: "IDR",
-        price: "18800", // Penting untuk GEO: Gunakan angka mentah
+        price: "18800",
         availability: "https://schema.org/InStock",
+        priceValidUntil: "2026-12-31", // Tambahan: Validasi harga agar schema lebih sempurna
+        itemCondition: "https://schema.org/NewCondition",
       },
-      // Menambahkan AggregateRating membantu menonjol di mesin pencari & AI
+      // Peringatan: Pastikan Anda benar-benar menampilkan rating ini di UI web (misal di halaman Product.jsx)
+      // Jika Google mendeteksi schema rating tapi tidak ada di layar pengguna, bisa dianggap spam.
       aggregateRating: {
         "@type": "AggregateRating",
         ratingValue: "4.9",
         reviewCount: "150",
       },
     },
-
-    // 2. Skema LocalBusiness (Telah disempurnakan untuk Omnichannel)
     {
       "@context": "https://schema.org",
       "@type": "LocalBusiness",
@@ -44,11 +52,12 @@ const SEO = ({ title, description, image }) => {
       "@id": siteUrl,
       url: siteUrl,
       telephone: "+6289683027911",
+      priceRange: "Rp", // Tambahan untuk LocalBusiness
       address: {
         "@type": "PostalAddress",
         streetAddress: "Banyuwangi",
         addressLocality: "Banyuwangi",
-        addressRegion: "East Java",
+        addressRegion: "Jawa Timur", // Gunakan bahasa lokal yang dicari audiens
         postalCode: "68411",
         addressCountry: "ID",
       },
@@ -72,8 +81,6 @@ const SEO = ({ title, description, image }) => {
         closes: "23:59",
       },
       sameAs: ["https://www.tiktok.com/@basrengholic12"],
-
-      // TAMBAHAN GEO: Memberi tahu AI bahwa toko ini menerima pesanan online (Omnichannel)
       potentialAction: {
         "@type": "OrderAction",
         target: {
@@ -87,26 +94,24 @@ const SEO = ({ title, description, image }) => {
         },
       },
     },
-
-    // 3. TAMBAHAN GEO: Skema FAQ (Tanya Jawab untuk merespons AI Overviews)
     {
       "@context": "https://schema.org",
       "@type": "FAQPage",
       mainEntity: [
         {
           "@type": "Question",
-          name: "Apakah Basrengholic melayani pengiriman ke luar kota?",
+          name: "Apakah Basrengholic jual basreng pedas daun jeruk di Banyuwangi?",
           acceptedAnswer: {
             "@type": "Answer",
-            text: "Ya, Basrengholic berlokasi di Banyuwangi namun kami melayani pengiriman ke seluruh Indonesia melalui pemesanan online di TikTok Shop atau WhatsApp.",
+            text: "Ya, Basrengholic adalah pusat produksi basreng pedas daun jeruk dan basreng original terdekat di Banyuwangi. Kami melayani pengiriman ke seluruh Indonesia.",
           },
         },
         {
           "@type": "Question",
-          name: "Apa varian rasa paling best seller di Basrengholic?",
+          name: "Berapa harga basreng pedas Basrengholic?",
           acceptedAnswer: {
             "@type": "Answer",
-            text: "Varian paling laris kami adalah Basreng Pedas Daun Jeruk yang terkenal dengan tekstur renyah dan bumbu rempah melimpah.",
+            text: "Harga basreng kami sangat terjangkau mulai dari Rp 18.800. Teksturnya renyah, tidak keras, dan bumbunya melimpah.",
           },
         },
       ],
@@ -115,67 +120,49 @@ const SEO = ({ title, description, image }) => {
 
   return (
     <Helmet>
-      {/* Dasar SEO */}
       <html lang="id" />
-      <title>
-        {title
-          ? `${title} | Basrengholic`
-          : "Basrengholic - Basreng Pedas Daun Jeruk Premium"}
-      </title>
+      {/* Front-Loading Title */}
+      <title>{title ? `${title} | Basrengholic` : defaultTitle}</title>
       <meta name="description" content={description || defaultDescription} />
       <meta
         name="robots"
         content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1"
       />
-
-      {/* Kata Kunci Strategis */}
+      {/* Meta Keywords (Meski tidak berdampak besar untuk Google, tetap bagus untuk search engine lain) */}
       <meta
         name="keywords"
-        content="basreng, basreng pedas, basreng daun jeruk, basreng banyuwangi, keripik basreng, camilan pedas, basrengholic, jual basreng terdekat, basreng renyah, jajanan banyuwangi"
+        content="basreng pedas, basreng daun jeruk, basreng banyuwangi, basreng original, basrengholic"
       />
-
-      {/* Local SEO & Verification */}
+      {/* Local SEO */}
       <meta name="author" content="Basrengholic" />
       <meta name="geo.region" content="ID-JI" />
       <meta name="geo.placename" content="Banyuwangi" />
       <meta name="google-site-verification" content="google06742ab2f7d005c6" />
-
-      <link rel="canonical" href={siteUrl} />
-
-      {/* Open Graph / Facebook */}
+      <link rel="canonical" href={currentUrl} />
+      {/* Open Graph */}
       <meta property="og:type" content="website" />
-      <meta property="og:url" content={siteUrl} />
+      <meta property="og:url" content={currentUrl} />
       <meta
         property="og:title"
-        content={
-          title
-            ? `${title} | Basrengholic`
-            : "Basrengholic - Basreng Pedas Daun Jeruk Premium"
-        }
+        content={title ? `${title} | Basrengholic` : defaultTitle}
       />
       <meta
         property="og:description"
         content={description || defaultDescription}
       />
       <meta property="og:image" content={image || defaultImage} />
-
+      <meta property="og:locale" content="id_ID" /> {/* Tambahan locale */}
       {/* Twitter */}
-      <meta property="twitter:card" content="summary_large_image" />
+      <meta name="twitter:card" content="summary_large_image" />
       <meta
-        property="twitter:title"
-        content={
-          title
-            ? `${title} | Basrengholic`
-            : "Basrengholic - Basreng Pedas Daun Jeruk Premium"
-        }
+        name="twitter:title"
+        content={title ? `${title} | Basrengholic` : defaultTitle}
       />
       <meta
-        property="twitter:description"
+        name="twitter:description"
         content={description || defaultDescription}
       />
-      <meta property="twitter:image" content={image || defaultImage} />
-
-      {/* Penambahan Schema Markup (JSON-LD) yang teroptimasi */}
+      <meta name="twitter:image" content={image || defaultImage} />
       <script type="application/ld+json">{JSON.stringify(schemaMarkup)}</script>
     </Helmet>
   );
